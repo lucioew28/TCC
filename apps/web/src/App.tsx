@@ -32,34 +32,47 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
+import { useState } from "react";
+import { getPrediction } from "@/services/prediction";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  city: z.string({ required_error: "Esse campo é obrigatório." }),
+  sellingType: z.string({ required_error: "Esse campo é obrigatório." }),
+  propertyType: z.string({ required_error: "Esse campo é obrigatório." }),
+  totalArea: z.string({ required_error: "Esse campo é obrigatório." }),
+  numberOfBedrooms: z.string({ required_error: "Esse campo é obrigatório." }),
+  numberOfLivingRooms: z.string({
+    required_error: "Esse campo é obrigatório.",
+  }),
+  numberOfParkingSpaces: z.string({
+    required_error: "Esse campo é obrigatório.",
   }),
 });
 
 function App() {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     console.log(values);
+
+    try {
+      const response = await getPrediction();
+      console.log("response", response);
+    } catch (error) {
+      console.log("error", error);
+
+      return error;
+    }
+
+    setLoading(false);
   }
 
-  // cidade
-  // bairro
-  // preco
-  // modalidade venda
-  // tipo de imóvel
-  // area total
-  // Número de Quartos
-  // Número de Salas
-  // Vagas de Garagem
+  console.log("loading", loading);
 
   return (
     <main className="min-h-screen w-full bg-gray-100 flex justify-center pt-24 px-6">
@@ -125,7 +138,7 @@ function App() {
               <CardContent className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="city"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Cidade*</FormLabel>
@@ -152,47 +165,7 @@ function App() {
                 />
                 <FormField
                   control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bairro*</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o bairro" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {cityList.map((city, idx) => (
-                            <SelectItem key={city + idx} value={city}>
-                              {city}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Preço do imóvel*</FormLabel>
-                      <FormControl>
-                        <Input placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
+                  name="sellingType"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Modalidade de venda*</FormLabel>
@@ -222,7 +195,7 @@ function App() {
                 />
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="propertyType"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tipo do imóvel*</FormLabel>
@@ -252,10 +225,49 @@ function App() {
                 />
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="totalArea"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Número de Quartos*</FormLabel>
+                      <FormLabel>Area total*</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="numberOfBedrooms"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de quartos*</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="numberOfLivingRooms"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de salas*</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="numberOfParkingSpaces"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de vagas na garagem*</FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
