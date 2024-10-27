@@ -20,3 +20,17 @@ export const cityList = [
   "Nova Venécia",
   "Afonso Cláudio",
 ];
+
+export const sellingTypeList = [
+  "Leilão SFI - Edital Único",
+  "Licitação Aberta",
+  "Venda Direta Online",
+];
+
+export const propertyTypeList = [
+  "Apartamento",
+  "Casa",
+  "Loja",
+  "Sala",
+  "Terreno",
+];

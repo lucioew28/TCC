@@ -1,0 +1,39 @@
+service: api
+frameworkVersion: "3"
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: python3.9
+
+  ecr:
+    images:
+      predict:
+        path: ./functions/predict/
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "*"
+
+functions:
+  predict:
+    name: predict
+    image:
+      name: predict
+    timeout: 60
+    events:
+      - http:
+          path: predict
+          method: post
+          cors:
+            origin: "*"
