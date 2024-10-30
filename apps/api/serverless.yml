@@ -4,6 +4,9 @@ frameworkVersion: "3"
 package:
   individually: true
 
+  include:
+    - services/**
+
 provider:
   name: aws
   runtime: python3.9

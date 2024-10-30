@@ -2,7 +2,7 @@ export interface GetPrediction {
   city: number;
   sellingType: number;
   propertyType: number;
-  totalArea: number;
+  area: number;
   numberOfBedrooms: number;
   numberOfLivingRooms: number;
   numberOfParkingSpaces: number;
